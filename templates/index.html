@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Task Manager</h1>
+    <form id="taskForm">
+        <input type="text" id="taskInput" placeholder="Enter a new task">
+        <button type="submit">Add Task</button>
+    </form>
+    <ul id="taskList"></ul>
+    <script>
+        document.getElementById('taskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const taskInput = document.getElementById('taskInput').value;
+            const response = await fetch('/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ task: taskInput })
+            });
+            if (response.ok) {
+                loadTasks();
+                document.getElementById('taskInput').value = '';
+            }
+        });
+
+        async function loadTasks() {
+            const response = await fetch('/tasks');
+            const tasks = await response.json();
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.textContent = task.task;
+                li.dataset.id = task.id;
+                li.addEventListener('click', async () => {
+                    await deleteTask(task.id);
+                    loadTasks();
+                });
+                taskList.appendChild(li);
+            });
+        }
+
+        async function deleteTask(taskId) {
+            await fetch(`/tasks/${taskId}`, {
+                method: 'DELETE'
+            });
+        }
+
+        loadTasks();
+    </script>
+</body>
+</html>
