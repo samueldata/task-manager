@@ -16,14 +16,15 @@ A simple yet functional task manager application built with Flask. This project 
 - Add new tasks
 - View all tasks
 - Delete tasks
-- Simple and intuitive UI
+- Toggle between light and dark themes
+- Simple and intuitive UI with responsive design
 
 ## Installation
 
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/yourusername/task-manager.git
+    git clone https://github.com/samueldata/task-manager.git
     cd task-manager
     ```
 

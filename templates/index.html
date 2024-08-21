@@ -7,12 +7,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Task Manager</h1>
-    <form id="taskForm">
-        <input type="text" id="taskInput" placeholder="Enter a new task">
-        <button type="submit">Add Task</button>
-    </form>
-    <ul id="taskList"></ul>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>Task Manager</h1>
+                <button id="themeToggle">🌞</button>
+            </div>
+            <form id="taskForm">
+                <input type="text" id="taskInput" placeholder="Enter a new task">
+                <button type="submit">Add Task</button>
+            </form>
+            <ul id="taskList"></ul>
+        </div>
+    </div>
     <script>
         document.getElementById('taskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -39,6 +46,7 @@
                 const li = document.createElement('li');
                 li.textContent = task.task;
                 li.dataset.id = task.id;
+                li.classList.add('task-item');
                 li.addEventListener('click', async () => {
                     await deleteTask(task.id);
                     loadTasks();
@@ -52,6 +60,12 @@
                 method: 'DELETE'
             });
         }
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.textContent = document.body.classList.contains('dark-mode') ? '🌜' : '🌞';
+        });
 
         loadTasks();
     </script>
