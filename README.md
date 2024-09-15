@@ -1,15 +1,22 @@
 # Task Manager
 
-A simple yet functional task manager application built with Flask. This project serves as a starting point for anyone looking to create a task management system and is open for contributions and improvements.
+![License: MIT](https://img.shields.io/github/license/samueldata/task-manager)   ![Python Version](https://img.shields.io/badge/python-3.9.7-blue)   ![Last Commit](https://img.shields.io/github/last-commit/samueldata/task-manager)   ![GitHub issues](https://img.shields.io/github/issues/samueldata/task-manager)   ![Repo Size](https://img.shields.io/github/repo-size/samueldata/task-manager)   ![GitHub forks](https://img.shields.io/github/forks/samueldata/task-manager?style=social)   ![GitHub stars](https://img.shields.io/github/stars/samueldata/task-manager?style=social)
+
+![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen) 
+
+
+A simple yet functional task manager application built with Flask. This project is a starting point for anyone looking to create a task management system and is open to contributions and improvements.
 
 ## Table of Contents
 
-- Features
-- Installation
-- Usage
-- Contributing
-- License
-- Contact
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Technologies Used](#technologies-used)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+- [Project Status](#project-status)
 
 ## Features
 
@@ -59,6 +66,13 @@ A simple yet functional task manager application built with Flask. This project 
 - **Add Task:** Use the input field to add a new task.
 - **Delete Task:** Click on a task to delete it.
 
+  ## Technologies Used
+
+- **Backend:** Flask (Python)
+- **Frontend:** HTML, CSS, JavaScript
+- **Database:** SQLite (in development)
+- **Environment Management:** Virtualenv
+
 ## Contributing
 
 Contributions are welcome! Here's how you can help:
@@ -74,7 +88,7 @@ Please make sure your code follows the project's coding standards and includes t
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 
