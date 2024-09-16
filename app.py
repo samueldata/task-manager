@@ -1,30 +1,79 @@
-from flask import Flask, request, jsonify, render_template
+import sqlite3
+from flask import Flask, jsonify, request, render_template
 
 app = Flask(__name__)
 
-tasks = []
+# Função para inicializar o banco de dados e criar a tabela de tarefas
+def init_db():
+    conn = sqlite3.connect('instance/tasks.db')  # Conecta ao banco
+    cursor = conn.cursor()
+    
+    # Cria a tabela de tarefas, se não existir
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS tasks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            task TEXT NOT NULL
+        )
+    ''')
+    
+    conn.commit()  # Salva as mudanças
+    conn.close()   # Fecha a conexão
 
+# Função para adicionar uma nova tarefa ao banco
+def add_task_to_db(task_text):
+    conn = sqlite3.connect('instance/tasks.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('INSERT INTO tasks (task) VALUES (?)', (task_text,))
+    
+    conn.commit()
+    conn.close()
+
+# Função para buscar todas as tarefas do banco
+def get_tasks_from_db():
+    conn = sqlite3.connect('instance/tasks.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT * FROM tasks')
+    tasks = cursor.fetchall()  # Retorna todas as tarefas como uma lista de tuplas
+    
+    conn.close()
+    return [{'id': task[0], 'task': task[1]} for task in tasks]  # Converte as tuplas em dicionários
+
+# Função para excluir uma tarefa do banco
+def delete_task_from_db(task_id):
+    conn = sqlite3.connect('instance/tasks.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('DELETE FROM tasks WHERE id = ?', (task_id,))
+    
+    conn.commit()
+    conn.close()
+
+# Rota para a página inicial
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/tasks', methods=['GET'])
-def get_tasks():
-    return jsonify(tasks)
+# Rota para manipular as tarefas (adicionar e listar)
+@app.route('/tasks', methods=['GET', 'POST'])
+def tasks_handler():
+    if request.method == 'GET':
+        tasks = get_tasks_from_db()  # Pega as tarefas do banco
+        return jsonify(tasks)
+    
+    if request.method == 'POST':
+        task_data = request.get_json()
+        task_text = task_data.get('task')
+        add_task_to_db(task_text)  # Adiciona a tarefa ao banco
+        return jsonify({'task': task_text}), 201
 
-@app.route('/tasks', methods=['POST'])
-def add_task():
-    task = request.json.get('task')
-    if task:
-        tasks.append({'id': len(tasks) + 1, 'task': task})
-        return jsonify({'message': 'Task added successfully!'}), 201
-    return jsonify({'message': 'Task is required!'}), 400
-
+# Rota para deletar uma tarefa
 @app.route('/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
-    global tasks
-    tasks = [task for task in tasks if task['id'] != task_id]
-    return jsonify({'message': 'Task deleted successfully!'})
+    delete_task_from_db(task_id)  # Deleta a tarefa do banco
+    return '', 204
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=5001)
+    init_db()  # Inicializa o banco de dados ao iniciar o app
+    app.run(debug=True, port=5001)

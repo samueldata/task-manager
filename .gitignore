@@ -1,0 +1,58 @@
+# Python-related files
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+*.pyo
+*.pyd
+*.whl
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.ENV/
+
+# Flask specific
+instance/
+*.db
+
+# VSCode settings (optional, if you're using VSCode)
+.vscode/
+
+# Jupyter Notebook checkpoints (in case you use Jupyter)
+.ipynb_checkpoints/
+
+# Pytest cache
+.cache/
+
+# Logs and debugging output
+*.log
+*.out
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Anaconda environment (if applicable)
+anaconda3/
+
+# SQLite database backups
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# macOS system files
+*.DS_Store
+
+# Coverage reports
+htmlcov/
+.coverage
+.tox/
+.nox/
+.pytest_cache/

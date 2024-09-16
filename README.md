@@ -9,20 +9,22 @@ A simple yet functional task manager application built with Flask. This project 
 
 ## Table of Contents
 
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-- [Project Status](#project-status)
+- [Task Manager](#task-manager)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Technologies Used](#technologies-used)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Contact](#contact)
 
 ## Features
 
 - Add new tasks
 - View all tasks
 - Delete tasks
+- Persistent task storage using SQLite
 - Toggle between light and dark themes
 - Simple and intuitive UI with responsive design
 
@@ -48,16 +50,26 @@ A simple yet functional task manager application built with Flask. This project 
     pip install -r requirements.txt
     ```
 
-4. **Run the application:**
+4. **Initialize the database:**
+
+    Ensure the `instance` directory exists and the SQLite database is initialized:
+    
+    ```bash
+    flask db init
+    flask db migrate
+    flask db upgrade
+    ```
+
+5. **Run the application:**
 
     ```bash
     python app.py
     ```
 
-5. **Open your browser and navigate to:**
+6. **Open your browser and navigate to:**
 
     ```
-    http://127.0.0.1:5000
+    http://127.0.0.1:5001
     ```
 
 ## Usage
@@ -65,8 +77,9 @@ A simple yet functional task manager application built with Flask. This project 
 - **Home Page:** View and manage your tasks.
 - **Add Task:** Use the input field to add a new task.
 - **Delete Task:** Click on a task to delete it.
+- **Persistent Data:** Tasks are now stored in a SQLite database, meaning they are preserved even after restarting the application.
 
-  ## Technologies Used
+## Technologies Used
 
 - **Backend:** Flask (Python)
 - **Frontend:** HTML, CSS, JavaScript

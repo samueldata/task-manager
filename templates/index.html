@@ -14,13 +14,15 @@
                 <button id="themeToggle">🌞</button>
             </div>
             <form id="taskForm">
-                <input type="text" id="taskInput" placeholder="Enter a new task">
+                <input type="text" id="taskInput" placeholder="Enter a new task" required>
                 <button type="submit">Add Task</button>
             </form>
             <ul id="taskList"></ul>
         </div>
     </div>
+
     <script>
+        // Adicionar uma nova tarefa
         document.getElementById('taskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const taskInput = document.getElementById('taskInput').value;
@@ -32,41 +34,49 @@
                 body: JSON.stringify({ task: taskInput })
             });
             if (response.ok) {
-                loadTasks();
-                document.getElementById('taskInput').value = '';
+                loadTasks(); // Recarregar as tarefas
+                document.getElementById('taskInput').value = ''; // Limpar o input
             }
         });
 
+        // Carregar as tarefas da API
         async function loadTasks() {
             const response = await fetch('/tasks');
             const tasks = await response.json();
             const taskList = document.getElementById('taskList');
-            taskList.innerHTML = '';
+            taskList.innerHTML = ''; // Limpar a lista antes de carregar
+
             tasks.forEach(task => {
                 const li = document.createElement('li');
                 li.textContent = task.task;
                 li.dataset.id = task.id;
                 li.classList.add('task-item');
+                
+                // Adicionar função para deletar a tarefa ao clicar
                 li.addEventListener('click', async () => {
                     await deleteTask(task.id);
-                    loadTasks();
+                    loadTasks(); // Recarregar as tarefas
                 });
+                
                 taskList.appendChild(li);
             });
         }
 
+        // Função para deletar uma tarefa
         async function deleteTask(taskId) {
             await fetch(`/tasks/${taskId}`, {
                 method: 'DELETE'
             });
         }
 
+        // Alternar entre modos de tema claro/escuro
         document.getElementById('themeToggle').addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             const themeToggle = document.getElementById('themeToggle');
             themeToggle.textContent = document.body.classList.contains('dark-mode') ? '🌜' : '🌞';
         });
 
+        // Carregar as tarefas assim que a página for carregada
         loadTasks();
     </script>
 </body>
