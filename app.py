@@ -110,6 +110,15 @@ def delete_task(task_id):
         print(f"Erro ao processar requisição DELETE: {e}")
         return jsonify({'error': 'Internal Server Error'}), 500
 
+# Rota para inicializar o banco de dados manualmente
+@app.route('/init-db', methods=['GET'])
+def initialize_database():
+    try:
+        init_db()
+        return "Banco de dados inicializado com sucesso.", 200
+    except Exception as e:
+        return f"Erro ao inicializar o banco de dados: {e}", 500
+
 if __name__ == '__main__':
     init_db()  # Inicializa o banco de dados ao iniciar o app
     app.run(debug=False, port=5001)
