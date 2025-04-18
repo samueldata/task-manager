@@ -1,5 +1,10 @@
+import os
 import sqlite3
 from flask import Flask, jsonify, request, render_template
+
+# Garante que a pasta 'instance/' exista
+if not os.path.exists('instance'):
+    os.makedirs('instance')
 
 app = Flask(__name__)
 
@@ -76,4 +81,4 @@ def delete_task(task_id):
 
 if __name__ == '__main__':
     init_db()  # Inicializa o banco de dados ao iniciar o app
-    app.run(debug=True, port=5001)
+    app.run(debug=False, port=5001)
