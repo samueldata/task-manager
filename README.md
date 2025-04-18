@@ -79,6 +79,10 @@ A simple yet functional task manager application built with Flask. This project 
 - **Delete Task:** Click on a task to delete it.
 - **Persistent Data:** Tasks are now stored in a SQLite database, meaning they are preserved even after restarting the application.
 
+## Demonstration
+
+![Task Manager in Action](https://github.com/user-attachments/assets/2bdd3180-eb3c-4e11-98b0-e0b852839a6d)
+
 ## Technologies Used
 
 - **Backend:** Flask (Python)
