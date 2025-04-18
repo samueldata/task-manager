@@ -5,6 +5,7 @@ from flask import Flask, jsonify, request, render_template
 # Garante que a pasta 'instance/' exista
 if not os.path.exists('instance'):
     os.makedirs('instance')
+    print("Diretório 'instance/' criado com sucesso.")
 
 app = Flask(__name__)
 
@@ -20,6 +21,7 @@ def init_db():
             task TEXT NOT NULL
         )
     ''')
+    print("Tabela 'tasks' criada ou já existente.")
     
     conn.commit()  # Salva as mudanças
     conn.close()   # Fecha a conexão
