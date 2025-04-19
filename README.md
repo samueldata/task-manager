@@ -1,6 +1,6 @@
 # Task Manager
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)   ![License: MIT](https://img.shields.io/github/license/samueldata/task-manager)   ![Python Version](https://img.shields.io/badge/python-3.9.7-blue)   ![Last Commit](https://img.shields.io/github/last-commit/samueldata/task-manager)   ![GitHub issues](https://img.shields.io/github/issues/samueldata/task-manager)   ![Repo Size](https://img.shields.io/github/repo-size/samueldata/task-manager)   ![GitHub forks](https://img.shields.io/github/forks/samueldata/task-manager?style=social)   ![GitHub stars](https://img.shields.io/github/stars/samueldata/task-manager?style=social)
+![Version](https://img.shields.io/badge/version-1.1.0-blue)   ![License: MIT](https://img.shields.io/github/license/samueldata/task-manager)   ![Python Version](https://img.shields.io/badge/python-3.9.7-blue)   ![Last Commit](https://img.shields.io/github/last-commit/samueldata/task-manager)   ![GitHub issues](https://img.shields.io/github/issues/samueldata/task-manager)   ![Repo Size](https://img.shields.io/github/repo-size/samueldata/task-manager)   ![GitHub forks](https://img.shields.io/github/forks/samueldata/task-manager?style=social)   ![GitHub stars](https://img.shields.io/github/stars/samueldata/task-manager?style=social)
 
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 
@@ -37,6 +37,8 @@ A fully functional task manager application built with Flask. This project inclu
   - Toggle between light and dark themes.
 - **Secure Passwords**:
   - Passwords are hashed using `pbkdf2:sha256` for security.
+- **Flash Messages**:
+  - User-friendly flash messages for feedback (e.g., login errors, registration success).
 
 ---
 
@@ -81,11 +83,13 @@ Follow these steps to set up the project locally:
 
 ## Usage
 
+- **Register**:
+  - Navigate to `/register` to create a new account.
+  - Fill in the username, password, and confirm password fields.
+  - Submit the form to register a new user.
 - **Login**:
-  - Use the default credentials:
-    - **Username**: `admin`
-    - **Password**: `admin123`
-  - Or create a new user in the database.
+  - Use the credentials created during registration to log in.
+  - If you don't have an account, click on the "Register here" link to create one.
 - **Home Page**:
   - View and manage your tasks.
 - **Add Task**:
@@ -93,14 +97,17 @@ Follow these steps to set up the project locally:
 - **Delete Task**:
   - Click on a task to delete it.
 - **Logout**:
-  - Use the logout button (🔓) in the top-right corner to log out.
+  - Use the logout button (👋) in the top-right corner to log out.
 
 ---
 
 ## Demonstration
 
 ### Login Page
-![Login Page](https://github.com/user-attachments/assets/6d460b77-aa84-4915-bb0e-091ce8b89cb4)
+![Login Page](https://github.com/user-attachments/assets/2b718a69-ecc3-4728-8eb5-65c01f6d50f9)
+
+### Registration Page
+![Registration Page](https://github.com/user-attachments/assets/c644ed71-49d2-40ca-a8c7-c64d15da0848)
 
 ### Task Manager
 ![Task Manager](https://github.com/user-attachments/assets/c640f797-023c-4c35-a79f-e3854c787b52)

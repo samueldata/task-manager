@@ -1,13 +1,13 @@
 import os
 import sqlite3
-from flask import Flask, jsonify, request, render_template, redirect, url_for
+from flask import Flask, jsonify, request, render_template, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Garante que a pasta 'instance/' exista
 if not os.path.exists('instance'):
     os.makedirs('instance')
-    print("Diretório 'instance/' criado com sucesso.")
+    print("Directory 'instance/' created successfully.")
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
@@ -38,7 +38,7 @@ def load_user(user_id):
 # Função para inicializar o banco de dados e criar as tabelas
 def init_db():
     try:
-        print("Iniciando a criação do banco de dados...")
+        print("Starting database creation...")
         conn = sqlite3.connect('instance/tasks.db')
         cursor = conn.cursor()
         
@@ -67,9 +67,9 @@ def init_db():
         
         conn.commit()
         conn.close()
-        print("Banco de dados inicializado com sucesso.")
+        print("Database initialized successfully.")
     except Exception as e:
-        print(f"Erro ao inicializar o banco de dados: {e}")
+        print(f"Error initializing database: {e}")
 
 # Inicializa o banco de dados antes da primeira requisição
 @app.before_first_request
@@ -85,7 +85,7 @@ def add_task_to_db(task_text, user_id):
         conn.commit()
         conn.close()
     except Exception as e:
-        print(f"Erro ao adicionar tarefa: {e}")
+        print(f"Error adding task: {e}")
 
 # Função para buscar todas as tarefas do banco para um usuário
 def get_tasks_from_db(user_id):
@@ -97,7 +97,7 @@ def get_tasks_from_db(user_id):
         conn.close()
         return [{'id': task[0], 'task': task[1]} for task in tasks]
     except Exception as e:
-        print(f"Erro ao buscar tarefas: {e}")
+        print(f"Error fetching tasks: {e}")
         return []
     
 # Rota para a página inicial
@@ -135,24 +135,70 @@ def delete_task(task_id):
         
         return '', 204  # Retorna sucesso sem conteúdo
     except Exception as e:
-        print(f"Erro ao processar requisição DELETE: {e}")
+        print(f"Error processing DELETE request: {e}")
         return jsonify({'error': 'Internal Server Error'}), 500
 
-# Rota para login
+# Rota para registro de novos usuários
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+
+        # Validação de entrada
+        if not username or not password or not confirm_password:
+            flash('All fields are required.', 'error')
+            return render_template('register.html')
+
+        if password != confirm_password:
+            flash('Passwords do not match.', 'error')
+            return render_template('register.html')
+
+        # Verificar se o nome de usuário já existe
+        conn = sqlite3.connect('instance/tasks.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT id FROM users WHERE username = ?', (username,))
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            flash('Username already exists. Please choose another.', 'error')
+            conn.close()
+            return render_template('register.html')
+
+        # Adicionar o novo usuário ao banco de dados
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+        cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hashed_password))
+        conn.commit()
+        conn.close()
+
+        flash('User registered successfully! Please log in.', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('register.html')
+
+# Atualizar a rota de login para validação
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+
+        # Verificar credenciais no banco de dados
         conn = sqlite3.connect('instance/tasks.db')
         cursor = conn.cursor()
         cursor.execute('SELECT id, password FROM users WHERE username = ?', (username,))
         user = cursor.fetchone()
         conn.close()
-        if user and check_password_hash(user[1], password):
-            login_user(User(user[0], username))
-            return redirect(url_for('home'))
-        return "Invalid credentials", 401
+
+        if not user or not check_password_hash(user[1], password):
+            flash('Invalid credentials. Try again.', 'error')
+            return render_template('login.html')
+
+        # Autenticar o usuário
+        login_user(User(user[0], username))
+        return redirect(url_for('home'))
+
     return render_template('login.html')
 
 # Rota para logout
@@ -161,6 +207,28 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+# Rota para verificar se o username já existe no banco de dados
+@app.route('/check-username', methods=['GET'])
+def check_username():
+    username = request.args.get('username')
+    if not username:
+        return jsonify({'exists': False})
+
+    try:
+        conn = sqlite3.connect('instance/tasks.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT id FROM users WHERE username = ?', (username,))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user:
+            return jsonify({'exists': True})
+        else:
+            return jsonify({'exists': False})
+    except Exception as e:
+        print(f"Erro ao verificar username: {e}")
+        return jsonify({'exists': False}), 500
 
 if __name__ == '__main__':
     init_db()

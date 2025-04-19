@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <form id="registerForm" class="register-form" method="POST" action="/register" autocomplete="off">
+                <h1>Register</h1>
+                <div class="flash-container">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          <div class="flash-message {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
+                </div>
+                <label for="username" style="text-align: left; display: block; font-weight: bold;">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Username" required autocomplete="off">
+                <span id="username-message"></span>
+                <label for="password" style="text-align: left; display: block; font-weight: bold;">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Password" required autocomplete="new-password">
+                <label for="confirm_password" style="text-align: left; display: block; font-weight: bold;">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+                <span id="message"></span>
+                <br>
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? <a href="/login">Login here</a></p>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
