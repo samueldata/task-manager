@@ -100,10 +100,10 @@ Follow these steps to set up the project locally:
 ## Demonstration
 
 ### Login Page
-![Login Page](https://github.com/user-attachments/assets/login-page.png)
+![Login Page](https://github.com/user-attachments/assets/6d460b77-aa84-4915-bb0e-091ce8b89cb4)
 
 ### Task Manager
-![Task Manager](https://github.com/user-attachments/assets/task-manager.png)
+![Task Manager](https://github.com/user-attachments/assets/96dda270-fa9a-4842-a92e-056ebd62a63a)
 
 ---
 
