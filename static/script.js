@@ -51,13 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 2) Flash message (register & login)
-    const flashContainer = document.getElementById('flash-container');
-    if (flashContainer) {
+    const flashContainers = document.querySelectorAll('.flash-container');
+    flashContainers.forEach(flashContainer => {
         setTimeout(() => {
             flashContainer.style.opacity = '0';
             setTimeout(() => flashContainer.remove(), 500);
-        }, 5000);
-    }
+        }, 5000); // 5 segundos para desaparecer
+    });
 
     // 3) Form de registro (register.html)
     const registerForm = document.getElementById('registerForm');

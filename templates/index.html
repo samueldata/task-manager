@@ -21,6 +21,15 @@
             <div class="header">
                 <h1>Task Manager</h1>
             </div>
+            <div class="flash-container">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
             <form class="add-task-form" id="taskForm">
                 <input type="text" id="taskInput" placeholder="Enter a new task" required>
                 <button type="submit" id="addTaskButton">+</button>

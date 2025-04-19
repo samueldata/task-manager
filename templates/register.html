@@ -7,21 +7,19 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <div id="flash-container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <div class="flash-messages">
-              {% for category, message in messages %}
-                <div class="flash-message {{ category }}">{{ message }}</div>
-              {% endfor %}
-            </div>
-          {% endif %}
-        {% endwith %}
-    </div>
     <div class="container">
         <div class="card">
             <form id="registerForm" class="register-form" method="POST" action="/register" autocomplete="off">
                 <h1>Register</h1>
+                <div class="flash-container">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          <div class="flash-message {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
+                </div>
                 <label for="username" style="text-align: left; display: block; font-weight: bold;">Username:</label>
                 <input type="text" id="username" name="username" placeholder="Username" required autocomplete="off">
                 <span id="username-message"></span>
