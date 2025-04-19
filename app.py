@@ -208,6 +208,28 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+# Rota para verificar se o username já existe no banco de dados
+@app.route('/check-username', methods=['GET'])
+def check_username():
+    username = request.args.get('username')
+    if not username:
+        return jsonify({'exists': False})
+
+    try:
+        conn = sqlite3.connect('instance/tasks.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT id FROM users WHERE username = ?', (username,))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user:
+            return jsonify({'exists': True})
+        else:
+            return jsonify({'exists': False})
+    except Exception as e:
+        print(f"Erro ao verificar username: {e}")
+        return jsonify({'exists': False}), 500
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True, port=5001)

@@ -1,84 +1,150 @@
-// Função para carregar as tarefas
+// --- Funções gerais ---
 async function loadTasks() {
-    const response = await fetch('/tasks');
-    const tasks = await response.json();
     const taskList = document.getElementById('taskList');
-    taskList.innerHTML = ''; // Limpar a lista antes de carregar
+    if (!taskList) return;  // só roda em index.html
+
+    const response = await fetch('/tasks');
+    if (!response.ok) {
+        console.error('Erro ao carregar tarefas:', response.statusText);
+        return;
+    }
+    const tasks = await response.json();
+    taskList.innerHTML = '';
 
     tasks.forEach(task => {
         const li = document.createElement('li');
         li.textContent = task.task;
         li.dataset.id = task.id;
         li.classList.add('task-item');
-
-        // Adicionar função para deletar a tarefa ao clicar
         li.addEventListener('click', async () => {
             await deleteTask(task.id);
-            loadTasks(); // Recarregar as tarefas
+            loadTasks();
         });
-
         taskList.appendChild(li);
     });
 }
 
-// Função para deletar uma tarefa
 async function deleteTask(taskId) {
-    const response = await fetch(`/tasks/${taskId}`, {
-        method: 'DELETE'
-    });
-    if (!response.ok) {
-        console.error('Erro ao deletar tarefa:', response.statusText);
-    }
+    const response = await fetch(`/tasks/${taskId}`, { method: 'DELETE' });
+    if (!response.ok) console.error('Erro ao deletar tarefa:', response.statusText);
 }
 
-// Função para realizar o logout
 async function logout() {
-    const response = await fetch('/logout', {
-        method: 'GET'
-    });
+    const response = await fetch('/logout', { method: 'GET' });
     if (response.ok) {
-        // Redirecionar para a página de login após o logout
         window.location.href = '/login';
     } else {
         console.error('Erro ao realizar logout');
     }
 }
 
-// Alternar entre modos de tema claro/escuro
-document.getElementById('themeToggle').addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    const themeToggle = document.getElementById('themeToggle');
-    themeToggle.textContent = document.body.classList.contains('dark-mode') ? '🌜' : '🌞';
-});
-
-// Adicionar eventos após o DOM ser carregado
+// --- DOMContentLoaded: só rodar depois do HTML carregado ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Adicionar evento de clique ao botão de logout
+
+    // 1) Toggle de tema (presente em index.html)
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.textContent = document.body.classList.contains('dark-mode') ? '🌜' : '🌞';
+        });
+    }
+
+    // 2) Flash message (register & login)
+    const flashContainer = document.getElementById('flash-container');
+    if (flashContainer) {
+        setTimeout(() => {
+            flashContainer.style.opacity = '0';
+            setTimeout(() => flashContainer.remove(), 500);
+        }, 5000);
+    }
+
+    // 3) Form de registro (register.html)
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+        const message = document.getElementById('message');
+        const usernameInput = document.getElementById('username');
+        const usernameMessage = document.getElementById('username-message');
+
+        // Validação de senha
+        function checkMatch() {
+            if (password.value === confirmPassword.value) {
+                message.textContent = 'Passwords match ✅';
+                message.className = 'success';
+                return true;
+            } else {
+                message.textContent = 'Passwords do not match ❌';
+                message.className = 'error';
+                return false;
+            }
+        }
+        confirmPassword.addEventListener('input', checkMatch);
+        registerForm.addEventListener('submit', e => {
+            if (!checkMatch()) e.preventDefault();
+        });
+
+        // Validação de username via fetch
+        async function checkUsernameExists(username) {
+            try {
+                const res = await fetch(`/check-username?username=${encodeURIComponent(username)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    return data.exists;
+                }
+            } catch (err) {
+                console.error('Error checking username:', err);
+            }
+            return false;
+        }
+        usernameInput.addEventListener('input', async () => {
+            const uname = usernameInput.value.trim();
+            if (!uname) {
+                usernameMessage.textContent = '';
+                usernameInput.classList.remove('error');
+                return;
+            }
+            const exists = await checkUsernameExists(uname);
+            if (exists) {
+                usernameMessage.textContent = 'Username already exists ❌';
+                usernameMessage.className = 'error';
+                usernameInput.classList.add('error');
+            } else {
+                usernameMessage.textContent = 'Username is available ✅';
+                usernameMessage.className = 'success';
+                usernameInput.classList.remove('error');
+            }
+        });
+    }
+
+    // 4) Logout (index.html)
     const logoutButton = document.getElementById('logoutButton');
     if (logoutButton) {
         logoutButton.addEventListener('click', logout);
     }
 
-    // Adicionar evento ao formulário de adicionar tarefas
+    // 5) Task Manager (index.html)
     const taskForm = document.getElementById('taskForm');
-    if (taskForm) {
-        taskForm.addEventListener('submit', async (e) => {
+    const taskInput = document.getElementById('taskInput');
+    if (taskForm && taskInput) {
+        taskForm.addEventListener('submit', async e => {
             e.preventDefault();
-            const taskInput = document.getElementById('taskInput').value;
-            const response = await fetch('/tasks', {
+            const text = taskInput.value.trim();
+            if (!text) return;
+            const res = await fetch('/tasks', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ task: taskInput })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ task: text })
             });
-            if (response.ok) {
-                loadTasks(); // Recarregar as tarefas
-                document.getElementById('taskInput').value = ''; // Limpar o input
+            if (res.ok) {
+                taskInput.value = '';
+                loadTasks();
+            } else {
+                console.error('Erro ao adicionar tarefa:', res.statusText);
             }
         });
+        loadTasks();  // carrega as tasks só aqui
     }
 
-    // Carregar as tarefas ao carregar a página
-    loadTasks();
 });
