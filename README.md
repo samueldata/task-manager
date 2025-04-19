@@ -1,6 +1,6 @@
 # Task Manager
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)   ![License: MIT](https://img.shields.io/github/license/samueldata/task-manager)   ![Python Version](https://img.shields.io/badge/python-3.9.7-blue)   ![Last Commit](https://img.shields.io/github/last-commit/samueldata/task-manager)   ![GitHub issues](https://img.shields.io/github/issues/samueldata/task-manager)   ![Repo Size](https://img.shields.io/github/repo-size/samueldata/task-manager)   ![GitHub forks](https://img.shields.io/github/forks/samueldata/task-manager?style=social)   ![GitHub stars](https://img.shields.io/github/stars/samueldata/task-manager?style=social)
+![Version](https://img.shields.io/badge/version-1.1.0-blue)   ![License: MIT](https://img.shields.io/github/license/samueldata/task-manager)   ![Python Version](https://img.shields.io/badge/python-3.9.7-blue)   ![Last Commit](https://img.shields.io/github/last-commit/samueldata/task-manager)   ![GitHub issues](https://img.shields.io/github/issues/samueldata/task-manager)   ![Repo Size](https://img.shields.io/github/repo-size/samueldata/task-manager)   ![GitHub forks](https://img.shields.io/github/forks/samueldata/task-manager?style=social)   ![GitHub stars](https://img.shields.io/github/stars/samueldata/task-manager?style=social)
 
 ![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 
@@ -37,6 +37,8 @@ A fully functional task manager application built with Flask. This project inclu
   - Toggle between light and dark themes.
 - **Secure Passwords**:
   - Passwords are hashed using `pbkdf2:sha256` for security.
+- **Flash Messages**:
+  - User-friendly flash messages for feedback (e.g., login errors, registration success).
 
 ---
 
