@@ -71,6 +71,11 @@ def init_db():
     except Exception as e:
         print(f"Erro ao inicializar o banco de dados: {e}")
 
+# Inicializa o banco de dados antes da primeira requisição
+@app.before_first_request
+def initialize_database():
+    init_db()
+    
 # Função para adicionar uma nova tarefa ao banco
 def add_task_to_db(task_text, user_id):
     try:
