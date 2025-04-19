@@ -81,11 +81,13 @@ Follow these steps to set up the project locally:
 
 ## Usage
 
+- **Register**:
+  - Navigate to `/register` to create a new account.
+  - Fill in the username, password, and confirm password fields.
+  - Submit the form to register a new user.
 - **Login**:
-  - Use the default credentials:
-    - **Username**: `admin`
-    - **Password**: `admin123`
-  - Or create a new user in the database.
+  - Use the credentials created during registration to log in.
+  - If you don't have an account, click on the "Register here" link to create one.
 - **Home Page**:
   - View and manage your tasks.
 - **Add Task**:
@@ -93,7 +95,7 @@ Follow these steps to set up the project locally:
 - **Delete Task**:
   - Click on a task to delete it.
 - **Logout**:
-  - Use the logout button (🔓) in the top-right corner to log out.
+  - Use the logout button (👋) in the top-right corner to log out.
 
 ---
 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <form id="registerForm" class="register-form" method="POST" action="/register" autocomplete="off">
+                <h1>Register</h1>
+                <label for="username" style="text-align: left; display: block; font-weight: bold;">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Username" required autocomplete="off">
+                <label for="password" style="text-align: left; display: block; font-weight: bold;">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Password" required autocomplete="new-password">
+                <label for="confirm_password" style="text-align: left; display: block; font-weight: bold;">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+                <br>
+                <span id="message"></span>
+                <br>
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? <a href="/login">Login here</a></p>
+        </div>
+    </div>
+
+    <script>
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+        const message = document.getElementById('message');
+        const form = document.getElementById('registerForm');
+    
+        function checkMatch() {
+            if (password.value === confirmPassword.value) {
+                message.textContent = 'Passwords match ✅';
+                message.className = 'success';
+                return true;
+            } else {
+                message.textContent = 'Passwords do not match ❌';
+                message.className = 'error';
+                return false;
+            }
+        }
+    
+        confirmPassword.addEventListener('input', checkMatch);
+    
+        form.addEventListener('submit', function (e) {
+            if (!checkMatch()) {
+                e.preventDefault(); // Prevent form submission
+            }
+        });
+    </script>
+</body>
+</html>
